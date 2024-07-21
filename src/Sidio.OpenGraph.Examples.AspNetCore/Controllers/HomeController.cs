@@ -7,9 +7,22 @@ namespace Sidio.OpenGraph.Examples.AspNetCore.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly IOpenGraphBuilder _openGraphBuilder;
+
+    public HomeController(IOpenGraphBuilder openGraphBuilder)
+    {
+        _openGraphBuilder = openGraphBuilder;
+    }
+
     public IActionResult Index()
     {
-        this.SetOpenGraph("Home", "website", "https://example.com/image.jpg", "https://example.com/");
+        this.SetOpenGraph(
+            "Home",
+            "website",
+            "https://example.com/image.jpg",
+            "https://example.com/",
+            _openGraphBuilder);
+
         return View();
     }
 
