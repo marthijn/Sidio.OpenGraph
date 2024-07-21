@@ -7,6 +7,61 @@ public sealed class OpenGraphBuilderTests
     private readonly Fixture _fixture = new ();
 
     [Fact]
+    public void Add_ByTag_ShouldBeAdded()
+    {
+        // arrange
+        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var meta = new OpenGraphMetaTag("property1", "content1");
+
+        // act
+        var result = builder.Add(meta);
+
+        // assert
+        result.Should().BeTrue();
+        builder.MetaTags.Count.Should().Be(1);
+        builder.MetaTags.First().Should().Be(meta);
+    }
+
+    [Fact]
+    public void Add_ByParameters_ShouldBeAdded()
+    {
+        // arrange
+        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var propertyName = _fixture.Create<string>();
+        var content = _fixture.Create<string>();
+
+        // act
+        var result = builder.Add(propertyName, content);
+
+        // assert
+        result.Should().BeTrue();
+        builder.MetaTags.Count.Should().Be(1);
+        builder.MetaTags.First().PropertyName.Should().Be(propertyName);
+        builder.MetaTags.First().Content.Should().Be(content);
+        builder.MetaTags.First().Namespace.Should().BeEquivalentTo(OpenGraphNamespace.OpenGraph);
+    }
+
+    [Fact]
+    public void Add_ByParametersAndNamespace_ShouldBeAdded()
+    {
+        // arrange
+        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var propertyName = _fixture.Create<string>();
+        var content = _fixture.Create<string>();
+        var ns = _fixture.Create<OpenGraphNamespace>();
+
+        // act
+        var result = builder.Add(propertyName, content, ns);
+
+        // assert
+        result.Should().BeTrue();
+        builder.MetaTags.Count.Should().Be(1);
+        builder.MetaTags.First().PropertyName.Should().Be(propertyName);
+        builder.MetaTags.First().Content.Should().Be(content);
+        builder.MetaTags.First().Namespace.Should().BeEquivalentTo(ns);
+    }
+
+    [Fact]
     public void Add_EqualMeta_ShouldBeAddedOnce()
     {
         // arrange
@@ -21,6 +76,21 @@ public sealed class OpenGraphBuilderTests
         builder.MetaTags.Count.Should().Be(1);
         result1.Should().BeTrue();
         result2.Should().BeFalse();
+    }
+
+    [Fact]
+    public void AddRange_ShouldBeAdded()
+    {
+        // arrange
+        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var tags = _fixture.Build<OpenGraphMetaTag>().CreateMany(5).ToList();
+
+        // act
+        builder.AddRange(tags);
+
+        // assert
+        builder.MetaTags.Count.Should().Be(tags.Count);
+        builder.MetaTags.Should().BeEquivalentTo(tags);
     }
 
     [Fact]
