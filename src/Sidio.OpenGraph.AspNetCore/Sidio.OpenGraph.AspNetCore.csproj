@@ -13,7 +13,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <Description>Sidio.OpenGraph.AspNetCore is a .NET library for creating OpenGraph tags in ASP.NET Core applications.</Description>
+        <Description>Sidio.OpenGraph.AspNetCore is a .NET library for creating Open Graph tags in ASP.NET Core applications.</Description>
         <PackageTags>opengraph html meta aspnetcore</PackageTags>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>

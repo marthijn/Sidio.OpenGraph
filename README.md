@@ -1,6 +1,6 @@
 # Sidio.OpenGraph
-Sidio.OpenGraph is a .NET library for creating [OpenGraph](https://ogp.me/) tags. It suports
-both .NET Standard 2.0 and .NET 8.
+Sidio.OpenGraph is a .NET library for creating [OpenGraph](https://ogp.me/) tags. Both .NET Standard 2.0 and .NET 8
+are supported.
 
 ## Sidio.OpenGraph.AspNetCore
 Sidio.OpenGraph.AspNetCore provides the same functionality as Sidio.OpenGraph, but it has some

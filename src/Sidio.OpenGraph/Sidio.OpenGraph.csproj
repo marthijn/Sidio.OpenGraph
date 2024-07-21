@@ -13,7 +13,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Description>Sidio.OpenGraph is a .NET library for creating OpenGraph tags.</Description>
+    <Description>Sidio.OpenGraph is a .NET library for creating Open Graph tags.</Description>
     <PackageTags>opengraph html meta</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
