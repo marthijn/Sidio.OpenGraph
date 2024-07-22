@@ -2,13 +2,21 @@
 Sidio.OpenGraph is a .NET library for creating [OpenGraph](https://ogp.me/) tags. Both .NET Standard 2.0 and .NET 8
 are supported.
 
+[![build](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml/badge.svg)](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml)
+[![NuGet Version](https://img.shields.io/nuget/v/Sidio.OpenGraph)](https://www.nuget.org/packages/Sidio.OpenGraph/)
+
 ## Sidio.OpenGraph.AspNetCore
 Sidio.OpenGraph.AspNetCore provides the same functionality as Sidio.OpenGraph, but it has some
 helper functions to make it easier to use in an ASP.NET Core application. This library can be used in .NET 8
 applications only.
 
+[![build](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml/badge.svg)](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml)
+[![NuGet Version](https://img.shields.io/nuget/v/Sidio.OpenGraph.AspNetCore)](https://www.nuget.org/packages/Sidio.OpenGraph.AspNetCore/)
+
 # Installation
-This package will be available on NuGet soon.
+Get this package on NuGet:
+- [Sidio.OpenGraph](https://www.nuget.org/packages/Sidio.OpenGraph/)
+- [Sidio.OpenGraph.AspNetCore](https://www.nuget.org/packages/Sidio.OpenGraph.AspNetCore/)
 
 # Usage
 ## Builder pattern
