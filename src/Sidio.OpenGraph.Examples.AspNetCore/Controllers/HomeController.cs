@@ -21,7 +21,7 @@ public class HomeController : Controller
             "website",
             "https://example.com/image.jpg",
             "https://example.com/",
-            _openGraphBuilder);
+            builder: _openGraphBuilder);
 
         return View();
     }
