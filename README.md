@@ -4,6 +4,7 @@ are supported.
 
 [![build](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml/badge.svg)](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml)
 [![NuGet Version](https://img.shields.io/nuget/v/Sidio.OpenGraph)](https://www.nuget.org/packages/Sidio.OpenGraph/)
+[![Coverage Status](https://coveralls.io/repos/github/marthijn/Sidio.OpenGraph/badge.svg?branch=main)](https://coveralls.io/github/marthijn/Sidio.OpenGraph?branch=main)
 
 ## Sidio.OpenGraph.AspNetCore
 Sidio.OpenGraph.AspNetCore provides the same functionality as Sidio.OpenGraph, but it has some
@@ -12,6 +13,7 @@ applications only.
 
 [![build](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml/badge.svg)](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml)
 [![NuGet Version](https://img.shields.io/nuget/v/Sidio.OpenGraph.AspNetCore)](https://www.nuget.org/packages/Sidio.OpenGraph.AspNetCore/)
+[![Coverage Status](https://coveralls.io/repos/github/marthijn/Sidio.OpenGraph/badge.svg?branch=main)](https://coveralls.io/github/marthijn/Sidio.OpenGraph?branch=main)
 
 # Installation
 Get this package on NuGet:
