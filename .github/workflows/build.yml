@@ -41,7 +41,7 @@ jobs:
         uses: coverallsapp/github-action@v2.3.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          files: ${{ github.workspace }}/src/Sidio.OpenGraph.Tests/coverage/coverage.net8.0.cobertura.xml ${{ github.workspace }}/src/Sidio.OpenGraph.AspNetCore.Tests/coverage/coverage.cobertura.xml
+          files: ${{ github.workspace }}/src/Sidio.OpenGraph.Tests/coverage/coverage.net8.0.cobertura.xml ${{ github.workspace }}/src/Sidio.OpenGraph.Tests/coverage/coverage.net481.cobertura.xml ${{ github.workspace }}/src/Sidio.OpenGraph.AspNetCore.Tests/coverage/coverage.cobertura.xml
           format: cobertura
           base-path: ${{ github.workspace }}
         if: ${{ always() }}
