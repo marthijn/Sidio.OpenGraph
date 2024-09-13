@@ -74,6 +74,41 @@ public sealed class OpenGraphMetaTagTests
         meta.StructuredPropertyName.Should().Be(structuredPropertyName);
     }
 
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void Construct_PropertyNameIsNull_ShouldThrowException(string? propertyName)
+    {
+        // arrange
+        var content = _fixture.Create<string>();
+
+        // act
+        var action = () => new OpenGraphMetaTag(propertyName!, content);
+
+        // assert
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [Theory]
+    [InlineData("", "test")]
+    [InlineData(" ", "test")]
+    [InlineData(null, "test")]
+    [InlineData("test", " ")]
+    [InlineData("test", "  ")]
+    [InlineData("test", null)]
+    public void Construct_StructuredPropertyNameIsNull_ShouldThrowException(string? propertyName, string? structuredPropertyName)
+    {
+        // arrange
+        var content = _fixture.Create<string>();
+
+        // act
+        var action = () => new OpenGraphMetaTag(propertyName!, structuredPropertyName!, content);
+
+        // assert
+        action.Should().Throw<ArgumentException>();
+    }
+
     [Fact]
     public void Equals_ShouldBeEqual()
     {
@@ -117,6 +152,23 @@ public sealed class OpenGraphMetaTagTests
 
         // act
         var result = meta1.Equals(meta2);
+
+        // assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Equals_NullReferences_ShouldNotBeEqual()
+    {
+        // arrange
+        var meta1 = new OpenGraphMetaTag(
+            "property1",
+            "content1",
+            new OpenGraphNamespace(_fixture.Create<string>(), _fixture.Create<string>()));
+        OpenGraphMetaTag? meta2 = null;
+
+        // act
+        var result = meta1.Equals(meta2!);
 
         // assert
         result.Should().BeFalse();
