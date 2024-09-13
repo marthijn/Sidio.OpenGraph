@@ -55,7 +55,7 @@ public sealed record OpenGraphMetaTag : IEqualityComparer<OpenGraphMetaTag>
     /// <param name="content">The content.</param>
     /// <param name="openGraphNamespace">The namespace.</param>
     /// <exception cref="ArgumentException">Thrown when the propertyName or structuredPropertyName is null or white space.</exception>
-    public OpenGraphMetaTag(string propertyName, string structuredPropertyName,  string? content, OpenGraphNamespace openGraphNamespace)
+    public OpenGraphMetaTag(string propertyName, string structuredPropertyName, string? content, OpenGraphNamespace openGraphNamespace)
     {
         if (string.IsNullOrWhiteSpace(propertyName))
         {
@@ -91,7 +91,7 @@ public sealed record OpenGraphMetaTag : IEqualityComparer<OpenGraphMetaTag>
     /// <summary>
     /// Gets the structured property name.
     /// </summary>
-    private string? StructuredPropertyName { get; }
+    internal string? StructuredPropertyName { get; }
 
     /// <summary>
     /// Gets the property value (including the namespace, i.e. "namespace:property-name").

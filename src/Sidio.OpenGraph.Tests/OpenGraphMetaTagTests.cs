@@ -5,6 +5,76 @@ public sealed class OpenGraphMetaTagTests
     private readonly Fixture _fixture = new ();
 
     [Fact]
+    public void Construct_WithNameAndContent_ShouldBeConstructed()
+    {
+        // arrange
+        var propertyName = _fixture.Create<string>();
+        var content = _fixture.Create<string>();
+
+        // act
+        var meta = new OpenGraphMetaTag(propertyName, content);
+
+        // assert
+        meta.PropertyName.Should().Be(propertyName);
+        meta.Content.Should().Be(content);
+        meta.Namespace.Should().BeEquivalentTo(OpenGraphNamespace.OpenGraph);
+    }
+
+    [Fact]
+    public void Construct_WithNameAndContentAndNamespace_ShouldBeConstructed()
+    {
+        // arrange
+        var propertyName = _fixture.Create<string>();
+        var content = _fixture.Create<string>();
+        var ns = _fixture.Create<OpenGraphNamespace>();
+
+        // act
+        var meta = new OpenGraphMetaTag(propertyName, content, ns);
+
+        // assert
+        meta.PropertyName.Should().Be(propertyName);
+        meta.Content.Should().Be(content);
+        meta.Namespace.Should().BeEquivalentTo(ns);
+    }
+
+    [Fact]
+    public void Construct_WithNameAndContentAndStructuredName_ShouldBeConstructed()
+    {
+        // arrange
+        var propertyName = _fixture.Create<string>();
+        var content = _fixture.Create<string>();
+        var structuredPropertyName = _fixture.Create<string>();
+
+        // act
+        var meta = new OpenGraphMetaTag(propertyName, structuredPropertyName, content);
+
+        // assert
+        meta.PropertyName.Should().Be(propertyName);
+        meta.Content.Should().Be(content);
+        meta.Namespace.Should().BeEquivalentTo(OpenGraphNamespace.OpenGraph);
+        meta.StructuredPropertyName.Should().Be(structuredPropertyName);
+    }
+
+    [Fact]
+    public void Construct_WithNameAndContentAndStructuredNameAndNamespace_ShouldBeConstructed()
+    {
+        // arrange
+        var propertyName = _fixture.Create<string>();
+        var content = _fixture.Create<string>();
+        var structuredPropertyName = _fixture.Create<string>();
+        var ns = _fixture.Create<OpenGraphNamespace>();
+
+        // act
+        var meta = new OpenGraphMetaTag(propertyName, structuredPropertyName, content, ns);
+
+        // assert
+        meta.PropertyName.Should().Be(propertyName);
+        meta.Content.Should().Be(content);
+        meta.Namespace.Should().BeEquivalentTo(ns);
+        meta.StructuredPropertyName.Should().Be(structuredPropertyName);
+    }
+
+    [Fact]
     public void Equals_ShouldBeEqual()
     {
         // arrange
