@@ -44,4 +44,5 @@ jobs:
           files: ${{ github.workspace }}/src/Sidio.OpenGraph.Tests/coverage/coverage.net8.0.cobertura.xml ${{ github.workspace }}/src/Sidio.OpenGraph.Tests/coverage/coverage.net481.cobertura.xml ${{ github.workspace }}/src/Sidio.OpenGraph.AspNetCore.Tests/coverage/coverage.cobertura.xml
           format: cobertura
           base-path: ${{ github.workspace }}
+          debug: true
         if: ${{ always() }}
