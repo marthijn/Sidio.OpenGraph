@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Sidio.OpenGraph.Examples.AspNetCore.Models;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Sidio.OpenGraph.AspNetCore;
 
 namespace Sidio.OpenGraph.Examples.AspNetCore.Controllers;
@@ -26,12 +27,14 @@ public class HomeController : Controller
         return View();
     }
 
+    [ExcludeFromCodeCoverage]
     public IActionResult Privacy()
     {
         return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [ExcludeFromCodeCoverage]
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
