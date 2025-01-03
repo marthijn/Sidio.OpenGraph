@@ -5,10 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
+
+    <Deterministic>true</Deterministic>
+    <DeterministicSourcePaths>true</DeterministicSourcePaths>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Sidio.OpenGraph.AspNetCore\Sidio.OpenGraph.AspNetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SourceRoot Include="$(SolutionDir)/" />
   </ItemGroup>
 
 </Project>
