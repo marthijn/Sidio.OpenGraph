@@ -21,6 +21,7 @@
         <PackageIcon>icon.png</PackageIcon>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <DeterministicSourcePaths>true</DeterministicSourcePaths>
     </PropertyGroup>
 
     <ItemGroup>
@@ -51,5 +52,9 @@
     <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     </PropertyGroup>
+
+    <ItemGroup>
+        <SourceRoot Include="$(SolutionDir)/" />
+    </ItemGroup>
 
 </Project>
