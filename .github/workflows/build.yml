@@ -37,11 +37,22 @@ jobs:
           /p:CoverletOutputFormat="\"cobertura,json\""
           /p:CoverletOutput=coverage/
           /p:IncludeTestAssembly=false
+      - name: ReportGenerator
+        uses: danielpalme/ReportGenerator-GitHub-Action@v5
+        with:
+          reports: src/**/coverage/*.cobertura.xml
+          targetdir: coveragereport/
+          reporttypes: "Cobertura"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: src/**/coverage/
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coveragereport
+          path: coveragereport/
       - name: Upload dotnet test results
         uses: coverallsapp/github-action@v2.3.4
         with:
