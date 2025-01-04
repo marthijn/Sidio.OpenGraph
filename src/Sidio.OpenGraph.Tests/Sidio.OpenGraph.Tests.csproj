@@ -8,9 +8,6 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-
-        <Deterministic>true</Deterministic>
-        <DeterministicSourcePaths>true</DeterministicSourcePaths>
     </PropertyGroup>
 
     <ItemGroup>
@@ -42,10 +39,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Sidio.OpenGraph\Sidio.OpenGraph.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <SourceRoot Include="$(SolutionDir)/" />
     </ItemGroup>
 
 </Project>
