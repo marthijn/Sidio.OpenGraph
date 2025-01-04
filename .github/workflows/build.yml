@@ -37,6 +37,11 @@ jobs:
           /p:CoverletOutputFormat="\"cobertura,json\""
           /p:CoverletOutput=coverage/
           /p:IncludeTestAssembly=false
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: src/**/coverage/
       - name: Upload dotnet test results
         uses: coverallsapp/github-action@v2.3.4
         with:
