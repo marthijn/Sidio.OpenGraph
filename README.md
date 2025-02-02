@@ -1,19 +1,19 @@
 # Sidio.OpenGraph
-Sidio.OpenGraph is a .NET library for creating [OpenGraph](https://ogp.me/) tags. Both .NET Standard 2.0 and .NET 8
+Sidio.OpenGraph is a .NET library for creating [OpenGraph](https://ogp.me/) tags. Both .NET Standard 2.0 and .NET 8+
 are supported.
 
+|| Sidio.OpenGraph| Sidio.OpenGraph.AspNetCore                                                                                                                |
+|-|-|-------------------------------------------------------------------------------------------------------------------------------------------|
+|*NuGet*| [![NuGet Version](https://img.shields.io/nuget/v/Sidio.OpenGraph)](https://www.nuget.org/packages/Sidio.OpenGraph/) | [![NuGet Version](https://img.shields.io/nuget/v/Sidio.OpenGraph.AspNetCore)](https://www.nuget.org/packages/Sidio.OpenGraph.AspNetCore/) |
+|*Requirements*| .NET Standard 2.0 | .NET 8+, AspNetCore                                                                                                                       |
+
 [![build](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml/badge.svg)](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml)
-[![NuGet Version](https://img.shields.io/nuget/v/Sidio.OpenGraph)](https://www.nuget.org/packages/Sidio.OpenGraph/)
 [![Coverage Status](https://coveralls.io/repos/github/marthijn/Sidio.OpenGraph/badge.svg?branch=main)](https://coveralls.io/github/marthijn/Sidio.OpenGraph?branch=main)
 
-## Sidio.OpenGraph.AspNetCore
+## ASP .NET Core support
 Sidio.OpenGraph.AspNetCore provides the same functionality as Sidio.OpenGraph, but it has some
-helper functions to make it easier to use in an ASP.NET Core application. This library can be used in .NET 8
+helper functions to make it easier to use in an ASP.NET Core application. This library can be used in .NET 8 or higher
 applications only.
-
-[![build](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml/badge.svg)](https://github.com/marthijn/Sidio.OpenGraph/actions/workflows/build.yml)
-[![NuGet Version](https://img.shields.io/nuget/v/Sidio.OpenGraph.AspNetCore)](https://www.nuget.org/packages/Sidio.OpenGraph.AspNetCore/)
-[![Coverage Status](https://coveralls.io/repos/github/marthijn/Sidio.OpenGraph/badge.svg?branch=main)](https://coveralls.io/github/marthijn/Sidio.OpenGraph?branch=main)
 
 # Installation
 Get this package on NuGet:
