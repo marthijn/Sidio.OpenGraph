@@ -18,4 +18,21 @@ public sealed class OpenGraphTests
         openGraph.PrefixAttributeValue.Should().Be(prefix);
         openGraph.MetaTags.Should().BeEquivalentTo(metaTags);
     }
+
+    [Fact]
+    public void EqualityOperator_ShouldBeEqual()
+    {
+        // Arrange
+        var prefix = _fixture.Create<string>();
+        var metaTags = _fixture.CreateMany<OpenGraphMetaTag>().ToHashSet();
+
+        var openGraph1 = new OpenGraph(prefix, metaTags);
+        var openGraph2 = new OpenGraph(prefix, metaTags);
+
+        // Act
+        var result = openGraph1 == openGraph2;
+
+        // Assert
+        result.Should().BeTrue();
+    }
 }
