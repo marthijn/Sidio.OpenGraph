@@ -16,10 +16,11 @@ updates:
       tests:
         patterns:
           - "AutoFixture"
-          - "FluentAssertions"
+          - "AwesomeAssertions"
           - "xunit*"
           - "*Test*"
           - "coverlet*"
+          - "Moq"
   - package-ecosystem: "github-actions" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
