@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Sidio.OpenGraph;
 
@@ -77,13 +78,22 @@ public sealed class OpenGraphBuilder : IOpenGraphBuilder
     /// <inheritdoc />
     public string GetPrefixAttributeValue()
     {
-        var sb = new StringBuilder();
-        foreach (var ns in Namespaces)
-        {
-            sb.Append($"{ns.Prefix}: {ns.SchemaUri} ");
-        }
+        var pool = ObjectPool.Create<StringBuilder>();
+        var sb = pool.Get();
 
-        return sb.ToString().Trim();
+        try
+        {
+            foreach (var ns in Namespaces)
+            {
+                sb.Append($"{ns.Prefix}: {ns.SchemaUri} ");
+            }
+
+            return sb.ToString().Trim();
+        }
+        finally
+        {
+            pool.Return(sb);
+        }
     }
 
     /// <inheritdoc />
