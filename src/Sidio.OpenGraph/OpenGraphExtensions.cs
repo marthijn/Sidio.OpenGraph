@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Microsoft.Extensions.ObjectPool;
+﻿using Sidio.OpenGraph.ObjectPooling;
 
 namespace Sidio.OpenGraph;
 
@@ -15,8 +14,7 @@ public static class OpenGraphExtensions
     /// <returns>A HTML <see cref="string"/>.</returns>
     public static string MetaTagsToHtml(this OpenGraph openGraph)
     {
-        var pool = ObjectPool.Create<StringBuilder>();
-        var builder = pool.Get();
+        var builder = StringBuilderObjectPool.Pool.Get();
 
         try
         {
@@ -29,7 +27,7 @@ public static class OpenGraphExtensions
         }
         finally
         {
-            pool.Return(builder);
+            StringBuilderObjectPool.Pool.Return(builder);
         }
     }
 }

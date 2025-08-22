@@ -1,6 +1,5 @@
-﻿using System.Text;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ObjectPool;
+﻿using Microsoft.Extensions.Logging;
+using Sidio.OpenGraph.ObjectPooling;
 
 namespace Sidio.OpenGraph;
 
@@ -78,8 +77,7 @@ public sealed class OpenGraphBuilder : IOpenGraphBuilder
     /// <inheritdoc />
     public string GetPrefixAttributeValue()
     {
-        var pool = ObjectPool.Create<StringBuilder>();
-        var sb = pool.Get();
+        var sb = StringBuilderObjectPool.Pool.Get();
 
         try
         {
@@ -92,7 +90,7 @@ public sealed class OpenGraphBuilder : IOpenGraphBuilder
         }
         finally
         {
-            pool.Return(sb);
+            StringBuilderObjectPool.Pool.Return(sb);
         }
     }
 
