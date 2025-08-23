@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Sidio.OpenGraph.ObjectPooling;
+﻿using System.Text;
+using Microsoft.Extensions.Logging;
+using Sidio.ObjectPool;
 
 namespace Sidio.OpenGraph;
 
@@ -9,6 +10,7 @@ namespace Sidio.OpenGraph;
 public sealed class OpenGraphBuilder : IOpenGraphBuilder
 {
     private readonly ILogger<OpenGraphBuilder>? _logger;
+    private readonly IObjectPoolService<StringBuilder>? _stringBuilderObjectPoolService;
     private readonly HashSet<OpenGraphMetaTag> _metaTags = new();
 
     /// <summary>
@@ -21,9 +23,11 @@ public sealed class OpenGraphBuilder : IOpenGraphBuilder
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenGraphBuilder"/> class.
     /// </summary>
+    /// <param name="stringBuilderObjectPoolService">The string builder object pool service.</param>
     /// <param name="logger">The logger.</param>
-    public OpenGraphBuilder(ILogger<OpenGraphBuilder> logger)
+    public OpenGraphBuilder(IObjectPoolService<StringBuilder> stringBuilderObjectPoolService, ILogger<OpenGraphBuilder> logger)
     {
+        _stringBuilderObjectPoolService = stringBuilderObjectPoolService;
         _logger = logger;
     }
 
@@ -77,20 +81,30 @@ public sealed class OpenGraphBuilder : IOpenGraphBuilder
     /// <inheritdoc />
     public string GetPrefixAttributeValue()
     {
-        var sb = StringBuilderObjectPool.Pool.Get();
+        if (_stringBuilderObjectPoolService == null)
+        {
+            return GetValue(new StringBuilder());
+        }
+
+        var sb = _stringBuilderObjectPoolService.Get();
 
         try
         {
-            foreach (var ns in Namespaces)
-            {
-                sb.Append($"{ns.Prefix}: {ns.SchemaUri} ");
-            }
-
-            return sb.ToString().Trim();
+            return GetValue(sb);
         }
         finally
         {
-            StringBuilderObjectPool.Pool.Return(sb);
+            _stringBuilderObjectPoolService.Return(sb);
+        }
+
+        string GetValue(StringBuilder stringBuilder)
+        {
+            foreach (var ns in Namespaces)
+            {
+                stringBuilder.Append($"{ns.Prefix}: {ns.SchemaUri} ");
+            }
+
+            return stringBuilder.ToString().Trim();
         }
     }
 

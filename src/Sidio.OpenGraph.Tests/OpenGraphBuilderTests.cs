@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
+﻿using System.Text;
+using Microsoft.Extensions.Logging.Abstractions;
+using Sidio.ObjectPool;
 
 namespace Sidio.OpenGraph.Tests;
 
@@ -10,7 +12,7 @@ public sealed class OpenGraphBuilderTests
     public void Add_ByTag_ShouldBeAdded()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         var meta = new OpenGraphMetaTag("property1", "content1");
 
         // act
@@ -26,7 +28,7 @@ public sealed class OpenGraphBuilderTests
     public void Add_ByParameters_ShouldBeAdded()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         var propertyName = _fixture.Create<string>();
         var content = _fixture.Create<string>();
 
@@ -45,7 +47,7 @@ public sealed class OpenGraphBuilderTests
     public void Add_ByParametersAndNamespace_ShouldBeAdded()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         var propertyName = _fixture.Create<string>();
         var content = _fixture.Create<string>();
         var ns = _fixture.Create<OpenGraphNamespace>();
@@ -65,7 +67,7 @@ public sealed class OpenGraphBuilderTests
     public void Add_EqualMeta_ShouldBeAddedOnce()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         var meta = new OpenGraphMetaTag("property1", "content1");
 
         // act
@@ -82,7 +84,7 @@ public sealed class OpenGraphBuilderTests
     public void AddRange_ShouldBeAdded()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         var tags = _fixture.Build<OpenGraphMetaTag>().CreateMany(5).ToList();
 
         // act
@@ -97,7 +99,7 @@ public sealed class OpenGraphBuilderTests
     public void Validate_WithOpenGraphNamespace_ShouldNotThrowException()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         builder.Add(
             new OpenGraphMetaTag("title", _fixture.Create<string>()));
         builder.Add(
@@ -118,7 +120,7 @@ public sealed class OpenGraphBuilderTests
     public void Validate_WithOpenGraphNamespaceAndMissingTitle_ShouldThrowException()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         builder.Add(
             new OpenGraphMetaTag("type", _fixture.Create<string>()));
         builder.Add(
@@ -137,7 +139,7 @@ public sealed class OpenGraphBuilderTests
     public void Namespaces_WithMultipleProperties_ShouldBeOne()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         builder.Add(
             new OpenGraphMetaTag("title", _fixture.Create<string>()));
         builder.Add(
@@ -154,7 +156,7 @@ public sealed class OpenGraphBuilderTests
     public void GetPrefixAttributeValue_WithMultipleProperties_ShouldContainNamespaces()
     {
         // arrange
-        var builder = new OpenGraphBuilder(NullLogger<OpenGraphBuilder>.Instance);
+        var builder = CreateOpenGraphBuilder();
         builder.Add(
             new OpenGraphMetaTag("title", _fixture.Create<string>(), new OpenGraphNamespace("ns1", "ns1/ns1")));
         builder.Add(
@@ -165,5 +167,24 @@ public sealed class OpenGraphBuilderTests
 
         // assert
         prefix.Should().Be("ns1: ns1/ns1 ns2: ns2/ns2");
+    }
+
+    private static OpenGraphBuilder CreateOpenGraphBuilder()
+    {
+        var objectPoolServiceMock = CreateObjectPoolServiceMock();
+        var builder = new OpenGraphBuilder(objectPoolServiceMock.Object, NullLogger<OpenGraphBuilder>.Instance);
+        return builder;
+    }
+
+    private static Mock<IObjectPoolService<StringBuilder>> CreateObjectPoolServiceMock()
+    {
+        var objectPoolMock = new Mock<Microsoft.Extensions.ObjectPool.ObjectPool<StringBuilder>>();
+        objectPoolMock.Setup(x => x.Get()).Returns(new StringBuilder());
+        var objectPoolServiceMock = new Mock<IObjectPoolService<StringBuilder>>();
+        objectPoolServiceMock.Setup(x => x.Pool).Returns(objectPoolMock.Object);
+        objectPoolServiceMock.Setup(x => x.Get()).Returns(() => objectPoolMock.Object.Get());
+        objectPoolServiceMock.Setup(x => x.Return(It.IsAny<StringBuilder>()))
+            .Callback<StringBuilder>(sb => objectPoolMock.Object.Return(sb));
+        return objectPoolServiceMock;
     }
 }

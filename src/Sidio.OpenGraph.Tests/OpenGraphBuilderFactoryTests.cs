@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Text;
+using Microsoft.Extensions.Logging;
+using Sidio.ObjectPool;
 
 namespace Sidio.OpenGraph.Tests;
 
@@ -9,7 +11,9 @@ public sealed class OpenGraphBuilderFactoryTests
     {
         // arrange
         var loggerFactory = new LoggerFactory();
-        var factory = new OpenGraphBuilderFactory(loggerFactory);
+        var objectPoolService = new Mock<IObjectPoolService<StringBuilder>>();
+
+        var factory = new OpenGraphBuilderFactory(loggerFactory, objectPoolService.Object);
 
         // act
         var result = factory.Create();

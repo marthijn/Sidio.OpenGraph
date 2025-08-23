@@ -1,4 +1,4 @@
-﻿using Sidio.OpenGraph.ObjectPooling;
+﻿using System.Text;
 
 namespace Sidio.OpenGraph;
 
@@ -11,23 +11,42 @@ public static class OpenGraphExtensions
     /// Converts the Open Graph object to HTML.
     /// </summary>
     /// <param name="openGraph">The Open Graph object.</param>
-    /// <returns>A HTML <see cref="string"/>.</returns>
+    /// <returns>An HTML <see cref="string"/>.</returns>
     public static string MetaTagsToHtml(this OpenGraph openGraph)
     {
-        var builder = StringBuilderObjectPool.Pool.Get();
+        var builder = new StringBuilder();
+        return MetaTagsToHtml(builder, openGraph);
+    }
+
+    /// <summary>
+    /// Converts the Open Graph object to HTML.
+    /// </summary>
+    /// <param name="openGraph">The Open Graph object.</param>
+    /// <param name="pool">The string builder object pool.</param>
+    /// <returns>An HTML <see cref="string"/>.</returns>
+    public static string MetaTagsToHtml(
+        this OpenGraph openGraph,
+        Microsoft.Extensions.ObjectPool.ObjectPool<StringBuilder> pool)
+    {
+        var builder = pool.Get();
 
         try
         {
-            foreach (var property in openGraph.MetaTags)
-            {
-                builder.Append($"<meta property=\"{property.Property}\" content=\"{property.Content}\" />");
-            }
-
-            return builder.ToString();
+            return MetaTagsToHtml(builder, openGraph);
         }
         finally
         {
-            StringBuilderObjectPool.Pool.Return(builder);
+            pool.Return(builder);
         }
+    }
+
+    private static string MetaTagsToHtml(StringBuilder builder, OpenGraph openGraph)
+    {
+        foreach (var property in openGraph.MetaTags)
+        {
+            builder.Append($"<meta property=\"{property.Property}\" content=\"{property.Content}\" />");
+        }
+
+        return builder.ToString();
     }
 }
