@@ -62,4 +62,9 @@ public interface IOpenGraphBuilder
     /// <remarks>A validation is performed before building the object.</remarks>
     /// <returns>THe <see cref="OpenGraph"/>.</returns>
     OpenGraph Build();
+
+    /// <summary>
+    /// Resets the builder by clearing all meta tags.
+    /// </summary>
+    void Clear();
 }

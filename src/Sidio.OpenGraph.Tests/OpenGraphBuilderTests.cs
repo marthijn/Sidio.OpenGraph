@@ -169,6 +169,30 @@ public sealed class OpenGraphBuilderTests
         prefix.Should().Be("ns1: ns1/ns1 ns2: ns2/ns2");
     }
 
+    [Fact]
+    public void Clear_ShouldRemoveAllMetaTags()
+    {
+        // Arrange
+        var builder = CreateOpenGraphBuilder();
+        builder.Add(
+            new OpenGraphMetaTag("title", _fixture.Create<string>(), new OpenGraphNamespace("ns1", "ns1/ns1")));
+        builder.Add(
+            new OpenGraphMetaTag("type", _fixture.Create<string>(), new OpenGraphNamespace("ns2", "ns2/ns2")));
+
+        builder.MetaTags.Should().NotBeEmpty();
+        builder.GetPrefixAttributeValue().Should().NotBeEmpty();
+
+        // Act
+        var openGraph = builder.Build();
+        builder.Clear();
+
+        // Assert
+        builder.MetaTags.Should().BeEmpty();
+        builder.GetPrefixAttributeValue().Should().BeEmpty();
+
+        openGraph.MetaTags.Should().NotBeEmpty();
+    }
+
     private static OpenGraphBuilder CreateOpenGraphBuilder()
     {
         var objectPoolServiceMock = CreateObjectPoolServiceMock();
@@ -179,7 +203,8 @@ public sealed class OpenGraphBuilderTests
     private static Mock<IObjectPoolService<StringBuilder>> CreateObjectPoolServiceMock()
     {
         var objectPoolMock = new Mock<Microsoft.Extensions.ObjectPool.ObjectPool<StringBuilder>>();
-        objectPoolMock.Setup(x => x.Get()).Returns(new StringBuilder());
+        objectPoolMock.Setup(x => x.Get()).Returns(() => new StringBuilder());
+
         var objectPoolServiceMock = new Mock<IObjectPoolService<StringBuilder>>();
         objectPoolServiceMock.Setup(x => x.Pool).Returns(objectPoolMock.Object);
         objectPoolServiceMock.Setup(x => x.Get()).Returns(() => objectPoolMock.Object.Get());

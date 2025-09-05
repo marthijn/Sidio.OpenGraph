@@ -14,6 +14,7 @@ public static class HtmlHelperExtensions
     /// </summary>
     /// <param name="htmlHelper">The HTML helper.</param>
     /// <returns>An <see cref="HtmlString"/>.</returns>
+    [Obsolete("Use tag helper: <open-graph />")]
     public static HtmlString RenderOpenGraphTags(this IHtmlHelper htmlHelper)
     {
         if (htmlHelper.ViewContext.ViewData[Constants.ViewDataKey] is not OpenGraph openGraph)
@@ -31,6 +32,7 @@ public static class HtmlHelperExtensions
     /// <param name="htmlHelper">The HTML helper.</param>
     /// <param name="pool">The string builder object pool.</param>
     /// <returns>An <see cref="HtmlString"/>.</returns>
+    [Obsolete("Use tag helper: <open-graph />")]
     public static HtmlString RenderOpenGraphTags(this IHtmlHelper htmlHelper, Microsoft.Extensions.ObjectPool.ObjectPool<StringBuilder> pool)
     {
         if (htmlHelper.ViewContext.ViewData[Constants.ViewDataKey] is not OpenGraph openGraph)

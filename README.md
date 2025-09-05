@@ -21,21 +21,11 @@ Get this package on NuGet:
 - [Sidio.OpenGraph.AspNetCore](https://www.nuget.org/packages/Sidio.OpenGraph.AspNetCore/)
 
 # Usage
-## Builder pattern
-The `OpenGraphBuilder` class is used to create an OpenGraph object:
-```csharp
-var builder = new OpenGraphBuilder();
-builder.Add(new OpenGraphMetaTag("tag1", tag1));
-builder.Add("tag2", tag2);
-builder.Add("mycustomtag", customTag, new OpenGraphNamespace("ab", "https://example.com/ns#"));
-
-var openGraph = builder.Build();
-```
-
 ## Dependency injection
-When using dependency injection, add the `IOpenGraphBuilderFactory` to the service collection by using the following
-line of code. The advantage of using dependency injection is that an `ILogger` is injected in the builder 
-which can provides some useful insights.
+Dependency injection is recommended over creating instances of `OpenGraphBuilder` directly. The
+`AddOpenGraph` extension method on `IServiceCollection` registers the following services:
+- `IOpenGraphBuilderFactory`: factory for creating `OpenGraphBuilder` instances.
+- `IObjectPoolService<OpenGraphBuilder>`: [object pool](https://en.wikipedia.org/wiki/Object_pool_pattern) for `OpenGraphBuilder` instances.
 ```csharp
 services.AddOpenGraph();
 ```
@@ -45,16 +35,44 @@ Example:
 public class MyClass
 {
     private readonly IOpenGraphBuilderFactory _factory;
+    private readonly IObjectPoolService<OpenGraphBuilder> _pool;
     
-    public MyClass(IOpenGraphBuilderFactory factory)
+    // use either the factory or the object pool. For demonstration purposes 
+    // they are both included here.
+    public MyClass(IOpenGraphBuilderFactory factory, IObjectPoolService<OpenGraphBuilder> pool)
     {
         _factory = factory;
+        _pool = pool;
     }
     
-    public void Example()
+    // with DI using the factory
+    public void Example1()
     {
         var  builder = _factory.CreateBuilder();
         builder.Add(new OpenGraphMetaTag("type", "example"));
+        builder.Add("tag2", tag2);
+        var openGraph = builder.Build();
+    }
+    
+    // with DI using an object pool
+    public void Example2()
+    {
+        using var borrowedBuilder = _pool.Borrow();
+        borrowedBuilder.Instance.Add(new OpenGraphMetaTag("type", "example"));
+        borrowedBuilder.Instance.Add("tag2", tag2);
+        var openGraph = builder.Instance.Build();
+    }
+    
+    // without DI, not recommended
+    public void Example3()
+    {
+        var builder = new OpenGraphBuilder();
+        builder.Add(new OpenGraphMetaTag("tag1", tag1));
+        builder.Add("tag2", tag2);
+        
+        // adding a custom tag with a custom namespace
+        builder.Add("mycustomtag", customTag, new OpenGraphNamespace("ab", "https://example.com/ns#"));
+        
         var openGraph = builder.Build();
     }
 }    
@@ -63,12 +81,17 @@ public class MyClass
 ## Asp.Net Core
 Controller:
 ```csharp
+// the builder pattern
 public IActionResult Example1()
 {
-    this.SetOpenGraph(myOpenGraphObject);
+    this.SetOpenGraph(builder =>
+        {
+            builder.Add("title", title);
+        });
     return View();
 }
 
+// the function with common tags
 public IActionResult Example2()
 {
     this.SetOpenGraph("Home", "website", "https://example.com/image.jpg", "https://example.com/");   
@@ -76,11 +99,18 @@ public IActionResult Example2()
 }
 ```
 
-View:
+Register tag helper (usually in `_ViewImports.cshtml`):
 ```cshtml
+@addTagHelper *, Sidio.OpenGraph.AspNetCore
+```
+
+View (e.g. in `_Layout.cshtml`):
+```cshtml
+<!-- 1. add the prefix in the html tag -->
 <html prefix="@Html.GetOpenGraphPrefixAttributeValue()">
 <head>
-  @Html.RenderOpenGraphTags()
+  <!-- 2. render the open graph tags -->
+  <open-graph />
 </head>
 ```
 

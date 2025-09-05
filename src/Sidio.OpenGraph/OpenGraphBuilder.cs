@@ -16,6 +16,7 @@ public sealed class OpenGraphBuilder : IOpenGraphBuilder
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenGraphBuilder"/> class.
     /// </summary>
+    [Obsolete("Use the constructor that accepts IObjectPoolService<StringBuilder> and ILogger<OpenGraphBuilder> (e.g. using the service provider).")]
     public OpenGraphBuilder()
     {
     }
@@ -129,7 +130,13 @@ public sealed class OpenGraphBuilder : IOpenGraphBuilder
     public OpenGraph Build()
     {
         Validate();
-        return new OpenGraph(GetPrefixAttributeValue(), MetaTags);
+        return new OpenGraph(GetPrefixAttributeValue(), new HashSet<OpenGraphMetaTag>(_metaTags));
+    }
+
+    /// <inheritdoc />
+    public void Clear()
+    {
+        _metaTags.Clear();
     }
 
     private IEnumerable<OpenGraphMetaTag> GetMetaTagsByNamespace(OpenGraphNamespace ns) =>
