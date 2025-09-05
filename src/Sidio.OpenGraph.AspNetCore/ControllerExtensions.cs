@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Sidio.ObjectPool;
 
 namespace Sidio.OpenGraph.AspNetCore;
 
@@ -12,9 +14,34 @@ public static class ControllerExtensions
     /// </summary>
     /// <param name="controller">The controller.</param>
     /// <param name="openGraph">The Open Graph object.</param>
+    [Obsolete("Use the overload that takes an Action<IOpenGraphBuilder> instead.")]
     public static void SetOpenGraph(this Controller controller, OpenGraph openGraph)
     {
-        controller.ViewData[Constants.ViewDataKey] = openGraph;
+        controller.SetOpenGraphInternal(openGraph);
+    }
+
+    /// <summary>
+    /// Set the Open Graph object in the ViewData.
+    /// </summary>
+    /// <param name="controller">The controller.</param>
+    /// <param name="builderConfiguration">The build configuration.</param>
+    public static void SetOpenGraph(this Controller controller, Action<IOpenGraphBuilder> builderConfiguration)
+    {
+        var objectPoolService =
+            (IObjectPoolService<OpenGraphBuilder>) controller.HttpContext.RequestServices.GetRequiredService(
+                typeof(IObjectPoolService<OpenGraphBuilder>));
+
+        var b = objectPoolService.Get();
+        try
+        {
+            builderConfiguration(b);
+            var openGraph = b.Build();
+            controller.SetOpenGraphInternal(openGraph);
+        }
+        finally
+        {
+            objectPoolService.Return(b);
+        }
     }
 
     /// <summary>
@@ -27,7 +54,6 @@ public static class ControllerExtensions
     /// <param name="url">The canonical URL of the object that will be used as its permanent ID in the graph.</param>
     /// <param name="siteName">If the object is part of a larger web site, the name which should be displayed for the overall site. e.g., "IMDb".</param>
     /// <param name="additionalTags">Additional tags that represent the object.</param>
-    /// <param name="builder">The builder (optional).</param>
     /// <param name="description">A one to two sentence description of the object.</param>
     /// <param name="locale">The locale in the format language_TERRITORY.</param>
     public static void SetOpenGraph(
@@ -39,35 +65,45 @@ public static class ControllerExtensions
         string? description = null,
         string? locale = null,
         string? siteName = null,
-        IReadOnlyCollection<OpenGraphMetaTag>? additionalTags = null,
-        IOpenGraphBuilder? builder = null)
+        IReadOnlyCollection<OpenGraphMetaTag>? additionalTags = null)
     {
-        builder ??= new OpenGraphBuilder();
-        builder.Add("title", title);
-        builder.Add("type", type);
-        builder.Add("image", image);
-        builder.Add("url", url);
+        controller.SetOpenGraph(Build);
 
-        if (description is not null)
+        return;
+
+        void Build(IOpenGraphBuilder openGraphBuilder)
         {
-            builder.Add("description", description);
-        }
+            openGraphBuilder.Add("title", title);
+            openGraphBuilder.Add("type", type);
+            openGraphBuilder.Add("image", image);
+            openGraphBuilder.Add("url", url);
 
-        if (locale is not null)
-        {
-            builder.Add("locale", locale);
-        }
+            if (description is not null)
+            {
+                openGraphBuilder.Add("description", description);
+            }
 
-        if (siteName is not null)
-        {
-            builder.Add("site_name", siteName);
-        }
+            if (locale is not null)
+            {
+                openGraphBuilder.Add("locale", locale);
+            }
 
-        if (additionalTags is {Count: > 0})
-        {
-            builder.AddRange(additionalTags);
-        }
+            if (siteName is not null)
+            {
+                openGraphBuilder.Add("site_name", siteName);
+            }
 
-        controller.SetOpenGraph(builder.Build());
+            if (additionalTags is {Count: > 0})
+            {
+                openGraphBuilder.AddRange(additionalTags);
+            }
+
+            controller.SetOpenGraphInternal(openGraphBuilder.Build());
+        }
+    }
+
+    private static void SetOpenGraphInternal(this Controller controller, OpenGraph openGraph)
+    {
+        controller.ViewData[Constants.ViewDataKey] = openGraph;
     }
 }

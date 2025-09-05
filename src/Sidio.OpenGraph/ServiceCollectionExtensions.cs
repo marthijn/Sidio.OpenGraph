@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Sidio.ObjectPool;
+using Sidio.OpenGraph.ObjectPool;
 
 namespace Sidio.OpenGraph;
 
@@ -19,6 +20,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddStringBuilderObjectPool();
         services.AddSingleton<IOpenGraphBuilderFactory, OpenGraphBuilderFactory>();
+        services.AddObjectPoolService<OpenGraphBuilder>((provider, sp) =>
+            provider.Create(new OpenGraphBuilderObjectPoolPolicy(sp.GetRequiredService<IOpenGraphBuilderFactory>())));
         return services;
     }
 }

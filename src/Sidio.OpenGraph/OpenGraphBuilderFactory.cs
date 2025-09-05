@@ -15,7 +15,7 @@ internal sealed class OpenGraphBuilderFactory : IOpenGraphBuilderFactory
         _objectPoolService = objectPoolService;
     }
 
-    public IOpenGraphBuilder Create()
+    public OpenGraphBuilder Create()
     {
         return new OpenGraphBuilder(_objectPoolService, _loggerFactory.CreateLogger<OpenGraphBuilder>());
     }

@@ -9,5 +9,5 @@ public interface IOpenGraphBuilderFactory
     /// Returns a new instance of the <see cref="IOpenGraphBuilder"/>.
     /// </summary>
     /// <returns></returns>
-    IOpenGraphBuilder Create();
+    OpenGraphBuilder Create();
 }

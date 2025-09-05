@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Sidio.OpenGraph.AspNetCore.Tests;
 
@@ -10,7 +12,7 @@ public sealed class ControllerExtensionsTests
     public void SetOpenGraph_WithOpenGraphObject_ShouldSetOpenGraph()
     {
         // arrange
-        var controller = new TestController();
+        var controller = new TestController(new DefaultHttpContext());
         var openGraph = new OpenGraphBuilder().Build();
 
         // act
@@ -21,10 +23,45 @@ public sealed class ControllerExtensionsTests
     }
 
     [Fact]
+    public void SetOpenGraph_WithBuildAction_ShouldSetOpenGraph()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddOpenGraph();
+        serviceCollection.AddLogging();
+
+        var controller = new TestController(new DefaultHttpContext());
+        controller.HttpContext.RequestServices = serviceCollection.BuildServiceProvider();
+
+        // Act
+        controller.SetOpenGraph(builder =>
+        {
+            builder.Add("title", "Test Title");
+            builder.Add("type", "Test Type");
+            builder.Add("image", "Test Image");
+            builder.Add("url", "Test URL");
+        });
+
+        // Assert
+        controller.ViewData[Constants.ViewDataKey].Should().NotBeNull();
+
+        var openGraph = (OpenGraph)controller.ViewData[Constants.ViewDataKey]!;
+        openGraph.MetaTags.Should().ContainSingle(tag => tag.Property == "og:title");
+        openGraph.MetaTags.Should().ContainSingle(tag => tag.Property == "og:type");
+        openGraph.MetaTags.Should().ContainSingle(tag => tag.Property == "og:image");
+        openGraph.MetaTags.Should().ContainSingle(tag => tag.Property == "og:url");
+    }
+
+    [Fact]
     public void SetOpenGraph_WithParameters_ShouldSetOpenGraph()
     {
         // arrange
-        var controller = new TestController();
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddOpenGraph();
+        serviceCollection.AddLogging();
+
+        var controller = new TestController(new DefaultHttpContext());
+        controller.HttpContext.RequestServices = serviceCollection.BuildServiceProvider();
 
         // act
         controller.SetOpenGraph(
@@ -52,7 +89,13 @@ public sealed class ControllerExtensionsTests
     public void SetOpenGraph_WithAllParameters_ShouldSetOpenGraph()
     {
         // arrange
-        var controller = new TestController();
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddOpenGraph();
+        serviceCollection.AddLogging();
+
+        var controller = new TestController(new DefaultHttpContext());
+        controller.HttpContext.RequestServices = serviceCollection.BuildServiceProvider();
+
         var additionalTags = new HashSet<OpenGraphMetaTag>
         {
             new("audio", "test"),
@@ -86,5 +129,14 @@ public sealed class ControllerExtensionsTests
         tags.Should().Contain("og:audio");
     }
 
-    private sealed class TestController : Controller;
+    private sealed class TestController : Controller
+    {
+        public TestController(HttpContext httpContext)
+        {
+            ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+        }
+    }
 }
