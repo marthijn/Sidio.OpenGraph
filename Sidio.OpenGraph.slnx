@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Examples/">
+    <Project Path="src/Sidio.OpenGraph.Examples.AspNetCore/Sidio.OpenGraph.Examples.AspNetCore.csproj" />
+  </Folder>
+  <Folder Name="/SolutionItems/">
+    <File Path=".gitignore" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Src/">
+    <Project Path="src/Sidio.OpenGraph.AspNetCore/Sidio.OpenGraph.AspNetCore.csproj" />
+    <Project Path="src/Sidio.OpenGraph/Sidio.OpenGraph.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="src/Sidio.OpenGraph.AspNetCore.Tests/Sidio.OpenGraph.AspNetCore.Tests.csproj" />
+    <Project Path="src/Sidio.OpenGraph.Tests/Sidio.OpenGraph.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Workflows/">
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/workflows/build.yml" />
+    <File Path=".github/workflows/dependabot-autoapprove.yml" />
+    <File Path=".github/workflows/release.yml" />
+  </Folder>
+</Solution>
