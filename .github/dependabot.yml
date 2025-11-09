@@ -16,7 +16,7 @@ updates:
       tests:
         patterns:
           - "AutoFixture"
-          - "AwesomeAssertions"
+          - "AwesomeAssertions*"
           - "xunit*"
           - "*Test*"
           - "coverlet*"
